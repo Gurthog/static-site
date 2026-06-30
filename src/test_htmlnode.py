@@ -4,6 +4,16 @@ from htmlnode import HTMLNode
 
 
 class TestHTMLNode(unittest.TestCase):
+    def test_values(self):
+        node = HTMLNode(
+            tag = "div",
+            value = "poopdeck",
+        )
+        self.assertEqual(node.tag, "div")
+        self.assertEqual(node.value, "poopdeck")
+        self.assertEqual(node.children, None)
+        self.assertEqual(node.props, None)
+
     def test_props_to_html_empty(self):
         node = HTMLNode()
         self.assertEqual(node.props_to_html(), "")

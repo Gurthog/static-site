@@ -1,18 +1,21 @@
+from typing import Optional
+
+
 class HTMLNode:
     def __init__(
             self,
-            tag: str = None,
-            value: str = None,
-            children: list[HTMLNode] = None,
-            props: dict = None,
+            tag: Optional[str] = None,
+            value: Optional[str] = None,
+            children: Optional[list[HTMLNode]] = None,
+            props: Optional[dict] = None,
         ) -> None:
         self.tag = tag
         self.value = value
         self.children = children
         self.props = props
 
-    def to_html(self):
-        raise NotImplementedError
+    def to_html(self) -> str:
+        raise NotImplementedError("to_html method not implemented")
 
     def props_to_html(self) -> str:
         if self.props is None:
@@ -29,14 +32,14 @@ class HTMLNode:
 class LeafNode(HTMLNode):
     def __init__(
             self,
-            tag: str,
+            tag: str | None,
             value: str,
-            props: dict = None,
+            props: Optional[dict] = None,
         ) -> None:
         super().__init__(tag=tag, value=value, props=props)
 
     def to_html(self) -> str:
-        if not self.value:
+        if self.value is None:
             raise ValueError("All leaf nodes must have a value.")
 
         if not self.tag:
@@ -54,9 +57,9 @@ class ParentNode(HTMLNode):
             self,
             tag: str,
             children: list[HTMLNode],
-            props: dict = None,
+            props: Optional[dict] = None,
         ) -> None:
-        super().__init__(tag, children=children, props=props)
+        super().__init__(tag=tag, children=children, props=props)
 
     def to_html(self) -> str:
         if not self.tag:
@@ -72,4 +75,7 @@ class ParentNode(HTMLNode):
 
         html += f"</{self.tag}>"
         return html
+
+    def __repr__(self) -> str:
+        return f"ParentNode({self.tag}, {self.children}, {self.props})"
 

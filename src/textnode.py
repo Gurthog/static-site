@@ -1,4 +1,7 @@
 from enum import Enum
+from typing import Optional
+
+from htmlnode import LeafNode
 
 
 class TextType(Enum):
@@ -12,11 +15,11 @@ class TextType(Enum):
 
 class TextNode:
     def __init__(
-            self,
-            text: str,
-            text_type: TextType,
-            url: str = None
-        ) -> None:
+        self,
+        text: str,
+        text_type: TextType,
+        url: Optional[str] = None
+    ) -> None:
         self.text = text
         self.text_type = text_type
         self.url = url
@@ -29,4 +32,25 @@ class TextNode:
 
     def __repr__(self) -> str:
         return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+
+
+def text_node_to_html_node(node: TextNode) -> LeafNode:
+    if node.text_type not in TextType:
+        raise ValueError(f"invalid text_type: {node.text_type}")
+
+    match node.text_type:
+        case TextType.BOLD:
+            return LeafNode("b", node.text)
+        case TextType.CODE:
+            return LeafNode("code", node.text)
+        case TextType.IMAGE:
+            return LeafNode("img", "", {"src": node.url, "alt": node.text})
+        case TextType.ITALIC:
+            return LeafNode("i", node.text)
+        case TextType.LINK:
+            return LeafNode("a", node.text, {"href": node.url})
+        case TextType.TEXT:
+            return LeafNode(None, node.text)
+        case _:
+            raise ValueError(f"unhandled text type: {node.text_type}")
 

@@ -3,12 +3,12 @@ from typing import Optional
 
 class HTMLNode:
     def __init__(
-            self,
-            tag: Optional[str] = None,
-            value: Optional[str] = None,
-            children: Optional[list[HTMLNode]] = None,
-            props: Optional[dict] = None,
-        ) -> None:
+        self,
+        tag: Optional[str] = None,
+        value: Optional[str] = None,
+        children: Optional[list[HTMLNode]] = None,
+        props: Optional[dict] = None,
+    ) -> None:
         self.tag = tag
         self.value = value
         self.children = children
@@ -31,11 +31,11 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(
-            self,
-            tag: str | None,
-            value: str,
-            props: Optional[dict] = None,
-        ) -> None:
+        self,
+        tag: str | None,
+        value: str,
+        props: Optional[dict] = None,
+    ) -> None:
         super().__init__(tag=tag, value=value, props=props)
 
     def to_html(self) -> str:
@@ -54,11 +54,11 @@ class LeafNode(HTMLNode):
 
 class ParentNode(HTMLNode):
     def __init__(
-            self,
-            tag: str,
-            children: list[HTMLNode],
-            props: Optional[dict] = None,
-        ) -> None:
+        self,
+        tag: str,
+        children: list[HTMLNode],
+        props: Optional[dict] = None,
+    ) -> None:
         super().__init__(tag=tag, children=children, props=props)
 
     def to_html(self) -> str:

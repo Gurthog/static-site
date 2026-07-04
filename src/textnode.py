@@ -34,6 +34,31 @@ class TextNode:
         return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
 
 
+def split_nodes_delimiter(
+    old_nodes: list[TextNode],
+    delimiter: str,
+    text_type: TextType
+) -> list[TextNode]:
+    new_nodes = []
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        delim_count = node.text.count(delimiter)
+        if delim_count == 0:
+            raise Exception(f"delimiter '{delimiter}' not found.")
+        elif delim_count % 2:
+            raise Exception(f"invalid markdown: odd number of delimiter '{delimiter}'.")
+
+        sections = node.text.split(delimiter)
+        for i, text in enumerate(sections):
+            pass
+
+        # wip
+        return new_nodes
+
+
 def text_node_to_html_node(node: TextNode) -> LeafNode:
     if node.text_type not in TextType:
         raise ValueError(f"invalid text_type: {node.text_type}")

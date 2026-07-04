@@ -47,16 +47,26 @@ def split_nodes_delimiter(
 
         delim_count = node.text.count(delimiter)
         if delim_count == 0:
-            raise Exception(f"delimiter '{delimiter}' not found.")
-        elif delim_count % 2:
+            new_nodes.append(node)
+            continue
+
+        if delim_count % 2:
             raise Exception(f"invalid markdown: odd number of delimiter '{delimiter}'.")
 
         sections = node.text.split(delimiter)
         for i, text in enumerate(sections):
-            pass
+            # odd-indexed sections contain the target text type
+            # "the *poop* dragon" -> ["the ", "poop", " dragon"]
+            # "*the* poop dragon" -> ["", "the", " poop dragon"]
+            # "the poop *dragon*" -> ["the poop ", "dragon", ""]
+            if not text:
+                continue
+            if i % 2:
+                new_nodes.append(TextNode(text, text_type))
+            else:
+                new_nodes.append(TextNode(text, TextType.TEXT))
 
-        # wip
-        return new_nodes
+    return new_nodes
 
 
 def text_node_to_html_node(node: TextNode) -> LeafNode:

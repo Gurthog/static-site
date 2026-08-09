@@ -1,5 +1,25 @@
+import re
+
 from textnode import TextNode, TextType
 from htmlnode import LeafNode, ParentNode
+
+
+def extract_markdown_images(text: str) -> list[tuple[str, str]]:
+    """
+    return a list of tuples[alt text, img url] for image links in text.
+
+    '![poop](poop.jpg)' -> [('poop', 'poop.jpg')]
+    """
+    return re.findall(r"\!\[(.*?)\]\((.*?)\)", text)
+
+
+def extract_markdown_links(text: str) -> list[tuple[str, str]]:
+    """
+    return a list of tuples[anchor text, url] for hyperlinks in text.
+
+    '[poop](poop.com)' -> [('poop', 'poop.com')]
+    """
+    return re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
 
 
 def split_nodes_delimiter(

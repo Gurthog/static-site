@@ -47,8 +47,8 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         nodes = [TextNode("not **freaking** _cool_ dude.", TextType.TEXT)]
         new_nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
         self.assertEqual(new_nodes[1], TextNode("cool", TextType.ITALIC))
+
         newer_nodes = split_nodes_delimiter(new_nodes, "**", TextType.BOLD)
-        print(newer_nodes)
         self.assertEqual(newer_nodes[0], TextNode("not ", TextType.TEXT))
         self.assertEqual(newer_nodes[1], TextNode("freaking", TextType.BOLD))
         self.assertEqual(newer_nodes[3], TextNode("cool", TextType.ITALIC))

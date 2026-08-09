@@ -2,9 +2,45 @@ import unittest
 
 from textnode import TextNode, TextType
 from processing import (
+    extract_markdown_images,
+    extract_markdown_links,
     split_nodes_delimiter,
     text_node_to_html_node,
 )
+
+
+class TestExtractMarkdownImages(unittest.TestCase):
+    def test_empty(self):
+        text = "what da hell"
+        images = extract_markdown_images(text)
+        self.assertEqual(images, [])
+
+    def test_doesnt_extract_links(self):
+        text = "there's [one link](link.org) here"
+        images = extract_markdown_images(text)
+        self.assertEqual(images, [])
+
+    def test_one(self):
+        text = "there's ![one image](image.png) here"
+        images = extract_markdown_images(text)
+        self.assertEqual(images, [('one image', 'image.png')])
+
+
+class TestExtractMarkdownLinks(unittest.TestCase):
+    def test_empty(self):
+        text = "what da hell"
+        links = extract_markdown_links(text)
+        self.assertEqual(links, [])
+
+    def test_doesnt_extract_images(self):
+        text = "there's ![one image](image.png) here"
+        links = extract_markdown_links(text)
+        self.assertEqual(links, [])
+
+    def test_one(self):
+        text = "there's [one link](link.org) here"
+        links = extract_markdown_links(text)
+        self.assertEqual(links, [('one link', 'link.org')])
 
 
 class TestSplitNodesDelimiter(unittest.TestCase):
